@@ -60,7 +60,7 @@ const handleMsg = (message: string)=>{
     </div>
    
     <div v-if="(!chatStore.messages.length)" class="flex justify-center h-screen items-center text-gray-400">
-    <h1 class="text-center px-4 md:text-[17px] lg:text-[18px]"> Start chatting by sending a message to our AI agent!</h1>
+    <h1 class="text-center px-4 md:text-[17px] lg:text-[18px]"> Start chatting by sending a message</h1>
     </div>
 
     <!-- chat messages -->
