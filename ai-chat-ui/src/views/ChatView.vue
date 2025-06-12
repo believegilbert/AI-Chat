@@ -59,7 +59,7 @@ const handleMsg = (message: string)=>{
      logged in as <span class="font-extrabold "> {{ userStore.name }} </span> 🔒
     </div>
    
-    <div v-if="(!chatStore.messages.length)" class="flex flex-1 justify-center items-center mt-[40%] text-gray-400">
+    <div v-if="(!chatStore.messages.length)" class="flex flex-1 justify-center items-center mt-[10%] text-gray-400">
     <h1 class="text-center px-4 text-[14px] md:text-[17px] lg:text-[18px]">Send a message to start chat</h1>
     </div>
 
