@@ -59,13 +59,16 @@ const handleMsg = (message: string)=>{
      logged in as <span class="font-extrabold "> {{ userStore.name }} </span> 🔒
     </div>
    
-    <div v-if="(!chatStore.messages.length)" class="flex flex-1 justify-center items-center mt-[10%] text-gray-400">
-    <h1 class="text-center px-4 text-[14px] md:text-[17px] lg:text-[18px]">Send a message to start chat</h1>
-    </div>
 
     <!-- chat messages -->
     <div id="chatContainer" class="flex-1 overflow-y-auto scrollbar-hide mx-auto w-full md:w-[80%] p-4 space-y-4">
+
+      <div v-if="(!chatStore.messages.length)" class="flex flex-1 justify-center items-center lg:mt-[20%] mt-[50%] text-gray-400">
+    <h1 class="text-center px-4 text-[14px] md:text-[17px] lg:text-[18px]">Send a message to start chat</h1>
+    </div>
+
       <div 
+      
       v-for="(message, index) in chatStore.messages" 
       :key="index"
        class="flex items-start"
@@ -75,6 +78,8 @@ const handleMsg = (message: string)=>{
             class="relative mx-w-ms px-4 py-2 rounded-lg"
           :class="message.role === 'user' ? 'bg-blue-600 text-white max-w-[250px] sm:max-w-[350px] md:max-w-[450px] lg:max-w-[650px] ' : 'bg-gray-700 text-white max-w-[250px] sm:max-w-[350px] md:max-w-[450px] lg:max-w-[650px] '"
          > 
+
+        
          <div v-html="formatMessage(message.content)"></div>
        <div :class="message.role === 'user' ? 'w-3 h-3 bg-blue-600 rotate-45 absolute bottom-2 right-0.5 translate-x-1 translate-y-1': 'w-3 h-3 bg-gray-700 rotate-40 absolute bottom-0 left-0 translate-x-[-1px] translate-y-[-3px]'"></div>
 
