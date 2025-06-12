@@ -53,14 +53,14 @@ const handleMsg = (message: string)=>{
 </script>
 
 <template>
-  <div class="flex flex-col h-[100vh] bg-gray-900 text-white">
+  <div class="flex flex-col h-screen bg-gray-900 text-white">
     <Header />
     <div class="text-gray-500 text-[12px] sm:text-[13px] md:text-[14px] ml-[1rem] font-medium mt-[0.75rem] mb-[1rem]">
      logged in as <span class="font-extrabold "> {{ userStore.name }} </span> 🔒
     </div>
    
-    <div v-if="(!chatStore.messages.length)" class="flex justify-center h-screen items-center text-gray-400">
-    <h1 class="text-center px-4 md:text-[17px] lg:text-[18px]"> Start chatting by sending a message</h1>
+    <div v-if="(!chatStore.messages.length)" class="flex flex-1 justify-center items-center mt-[40%] text-gray-400">
+    <h1 class="text-center px-4 text-[14px] md:text-[17px] lg:text-[18px]">Send a message to start chat</h1>
     </div>
 
     <!-- chat messages -->
