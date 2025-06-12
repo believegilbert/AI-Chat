@@ -53,7 +53,7 @@ const handleMsg = (message: string)=>{
 </script>
 
 <template>
-  <div class="flex flex-col h-screen bg-gray-900 text-white">
+  <div class="flex flex-col h-[100vh] bg-gray-900 text-white">
     <Header />
     <div class="text-gray-500 text-[12px] sm:text-[13px] md:text-[14px] ml-[1rem] font-medium mt-[0.75rem] mb-[1rem]">
      logged in as <span class="font-extrabold "> {{ userStore.name }} </span> 🔒

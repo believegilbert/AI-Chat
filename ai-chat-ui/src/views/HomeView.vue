@@ -49,7 +49,7 @@ const createUser = async () => {
 </script>
 
 <template>
-    <div class="h-screen flex justify-center items-center text-white bg-gray-900">
+    <div class="h-[100vh] flex justify-center items-center text-white bg-gray-900">
 
         <div class="p-8 bg-gray-800 rounded-lg shadow-lg w-full max-w-md">
             <img :src="robotImage" alt="robot" class="mx-auto w-24 h024 mb-4" />
@@ -60,7 +60,7 @@ const createUser = async () => {
             <input class="text-white w-full p-2 mb-2 rounded-lg focus:outline-none bg-gray-700"
                 placeholder="enter your email " v-model="email" />
 
-            <button class="w-full p-2 bg-blue-500 rounded-lg flex items-center justify-center gap-2"
+            <button class="w-full p-2 bg-blue-500 rounded-lg flex items-center justify-center gap-2 text-[14px]"
                 :class="loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'" :disabled="loading"
                 @click="createUser">
                 <svg v-if="loading" class=" animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
