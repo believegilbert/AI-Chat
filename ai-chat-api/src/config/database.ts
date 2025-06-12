@@ -15,3 +15,13 @@ const sql = neon(process.env.DATABASE_URL)
 
 //init drizzle
 export const db = drizzle(sql);
+
+//ping a light weight query to check db live connection
+(async () => {
+  try {
+    await sql`SELECT 1`;
+    console.log("✅ DB connected and reachable");
+  } catch (err) {
+    console.error("❌ Failed to connect to DB:", err);
+  }
+})();

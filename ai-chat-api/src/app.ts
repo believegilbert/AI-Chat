@@ -24,17 +24,6 @@ app.use(express.urlencoded({ extended: false }));
 
 //initialize gemini AI
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
-//function to send message to gemini AI and get response
-const geminiAI: any = async (userMessage: any) => {
-    const response: any = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: userMessage,
-    });
-    console.log(response.text);
-    const reply: string = response.text ?? "Sorry, I didn't understand that. Can you please rephrase your question?";
-    //return the reply from gemini AI
-    return reply
-}
 
 //initialize stream chat client
 const chatClient = StreamChat.getInstance(
@@ -115,8 +104,32 @@ app.post('/chat', async (req: Request, res: Response): Promise<any> => {
         }
 
 
-        //Ai response from gemini AI with initialized function call back
-        const AIreply: string = await geminiAI(message);
+        //fetch user past messages for context  
+        const chatHistory = await db
+            .select()
+            .from(chats)
+            .where(eq(chats.userId, userId))
+            .orderBy(chats.createdAt)
+            .limit(10);
+
+        const history: any = chatHistory.flatMap((msg) => [
+            { role: 'user', parts: [{ text: msg.message }] },
+            { role: 'model', parts: [{ text: msg.reply }] }
+        ])
+
+        const genAiFunct = async (history: any, message: any) => {
+            const chat: any = ai.chats.create({ model: "gemini-2.0-flash", history })
+            const response: any = await chat.sendMessage({ message: message })
+
+            const AIreply: string = await response.text ?? "Sorry, I didn't understand that. Can you please rephrase your question?";
+            console.log(AIreply)
+            return AIreply
+        }
+
+        const AIreply = await genAiFunct(history, message)
+
+
+
 
         //save chat to the database
         await db.insert(chats).values({ userId, message, reply: AIreply });
@@ -128,37 +141,36 @@ app.post('/chat', async (req: Request, res: Response): Promise<any> => {
         } as any);
 
         await channel.create();
+
         //send message to the channel
         await channel.sendMessage({ text: AIreply, user_id: 'ai_bot' });
 
-        res.status(200).json({ message: 'AI successfully replied' });
+        res.status(200).json({ reply: AIreply });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error while generating AI response' });
     }
-
-    //get chat history for a user
-    app.post('/get-message', async (req: Request, res: Response): Promise<any> => {
-const { userId } = req.body;
-        //check if userId is provided   
-if (!userId) {
-            return res.status(400).json({ error: 'User ID is required' });
-        }
-
-        try{
-            const chatHistory = await db
-                .select()  
-                .from(chats)
-                .where(eq(chats.userId, userId))
-res.status(200).json({messages: chatHistory});
-        }catch(error){
-            console.info("Error fetching chat history:", error);
-res.status(500).json({ error: 'Internal server error while fetching chat history' });
-        }
-    })
-
-
-
 })
+
+//get chat history for a user
+app.post('/get-messages', async (req: Request, res: Response): Promise<any> => {
+    const { userId } = req.body;
+    //check if userId is provided   
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    try {
+        const chatHistory = await db
+            .select()
+            .from(chats)
+            .where(eq(chats.userId, userId))
+        res.status(200).json({ messages: chatHistory });
+    } catch (error) {
+        console.info("Error fetching chat history:", error);
+        res.status(500).json({ error: 'Internal server error while fetching chat history' });
+    }
+})
+
 
 //start our server
 app.listen(process.env.PORT || 3000, () => {
