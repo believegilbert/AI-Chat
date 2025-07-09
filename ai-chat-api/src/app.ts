@@ -17,7 +17,12 @@ const PORT = process.env.PORT || 3000;
 
 //MIDDLEWARES   
 //use cors to allow cross-origin requests
-app.use(cors());
+app.use(cors({
+  origin: 'https://aichat-rho-sepia.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // only if you're using cookies or auth headers
+}));
 //use express.json() to parse JSON bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
